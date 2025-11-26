@@ -37,26 +37,30 @@
 <body>
 <header>
     <h1>Select the Dish to add to the Chef</h1>
+    <a th:href="@{'/dishes/dish-form'}">Add new Dish</a>
 </header>
 <section>
     <h2>Select dish:</h2>
     <form action="/chefDetails" method="POST">
-        <input type="hidden" name="chefId" th:value="${chefId}">
-        <input th:each="dish : ${dishes}" type="radio" name="dishId" th:value="${dish.getDishId()}" style="white-space: pre"
-               th:utext="${dish.getName()} + '<br />'"/>
-        <br/>
+        <!-- Dynamically display radio buttons for each dish -->
+        <div th:each="dish : ${dishes}">
+            <a  th:href="@{'/dishes/dish-form/{id}' (id=${dish.getId()})}">Edit</a>
+            <a th:href="@{'dishes/delete/{id}' (id=${dish.getId()})}">Delete</a>
+            <input type="radio" name="dishId" th:value="${dish.getDishId()}" th:text="|Dish Name: ${dish.getName()},Dish Cousine: ${dish.getCuisine()}|">
+        </div>
         <input type="submit" value="Add dish">
+        <input type="hidden" name="chefId" th:value="${chef.getId()}">
     </form>
 </section>
 <aside>
     <table>
         <tr>
             <td><b>Chef ID</b></td>
-            <td th:text="${chefId}"><!-- Display selected chefId --></td>
+            <td th:text="${chef.getId()}"><!-- Display selected chefId --></td>
         </tr>
         <tr>
             <td><b>Chef Name</b></td>
-            <td th:text="${chefName}"><!-- Display chef name --></td>
+            <td th:text="${chef.getFirstName()}"><!-- Display chef name --></td>
         </tr>
     </table>
 </aside>

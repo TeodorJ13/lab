@@ -7,10 +7,10 @@ import mk.ukim.finki.wp.lab.repository.DishRepository;
 import mk.ukim.finki.wp.lab.service.ChefService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
+import java.util.*;
 @Service
-public class ChefServiceImpl implements ChefService {
+public class ChefServiceImpl implements  ChefService {
+
     private final ChefRepository chefRepository;
     private final DishRepository dishRepository;
 
@@ -31,13 +31,10 @@ public class ChefServiceImpl implements ChefService {
 
     @Override
     public Chef addDishToChef(Long chefId, String dishId) {
-        Chef chef = findById(chefId);
-        List<Dish> dishes = chef.getDishes();
-        Dish targetDish = dishRepository.findByDishId(dishId);
-        if(targetDish != null && !dishes.contains(targetDish)) {
-            dishes.add(targetDish);
-            chef.setDishes(dishes);
-        }
-        return chefRepository.save(chef);
+
+        Chef chef1=chefRepository.findById(chefId).orElse(null);
+        Dish dish1=dishRepository.findByDishId(dishId);
+        chef1.getDishes().add(dish1);
+        return chefRepository.save(chef1);
     }
 }

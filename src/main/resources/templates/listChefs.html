@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Restaurant Chefs </title>
+  <title>Restaurant Chefs - Welcome to Our Restaurant</title>
   <style type="text/css">
     body {
       width: 800px;
@@ -19,10 +19,12 @@
   <h1>Welcome to Our Restaurant</h1>
 </header>
 <main>
+
   <h2>Choose a chef:</h2>
-  <form action="/dish" method="POST">
-    <input th:each="chef : ${chefs}" type="radio" name="chefId" th:value="${chef.getId()}" style="white-space: pre"
-           th:utext="'Name: ' + ${chef.getFirstName()} + ' ' + ${chef.getLastName()} + ', Bio: ' + ${chef.getBio()} + '<br />'"/>
+  <form action="/dishes" method="GET">
+    <div th:each="chef : ${chefs}">
+      <input type="radio" name="chefId" th:value="${chef.getId()}" th:text="|Name: ${chef.getFirstName()}, Surname: ${chef.getLastName()}, Bio: ${chef.getBio()}|">
+    </div>
     <input type="submit" value="Submit">
   </form>
 </main>

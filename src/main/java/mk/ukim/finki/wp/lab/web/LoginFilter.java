@@ -33,14 +33,14 @@ public class LoginFilter implements Filter {
         String path = req.getServletPath();
 
         if ("/dish".equals(path)) {
-            String chefId = req.getParameter("chefid");
+            String chefId = req.getParameter("chefId");
             if (chefId == null || chefId.isEmpty()) {
                 resp.sendRedirect("/listChefs");
                 return;
             }
         } else if ("/chefDetails".equals(path)) {
-            String chefId = req.getParameter("chefid");
-            String dishId = req.getParameter("dishid");
+            String chefId = req.getParameter("chefId");
+            String dishId = req.getParameter("dishId");
             if (chefId == null || chefId.isEmpty() || dishId == null || dishId.isEmpty()) {
                 resp.sendRedirect("/listChefs");
                 return;

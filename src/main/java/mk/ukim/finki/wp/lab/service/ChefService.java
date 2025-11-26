@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.lab.service;
 
 import mk.ukim.finki.wp.lab.model.Chef;
-import java.util.List;
+import java.util.*;
 
 public interface ChefService {
     List<Chef> listChefs();

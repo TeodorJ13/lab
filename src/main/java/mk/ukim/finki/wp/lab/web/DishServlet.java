@@ -14,46 +14,32 @@ import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.util.*;
 
-@WebServlet(name = "DishServlet", urlPatterns = "/dish")
+@WebServlet(name="dish-servlet",urlPatterns = "/dish")
 public class DishServlet extends HttpServlet {
-    private final SpringTemplateEngine templateEngine;
     private final DishService dishService;
     private final ChefService chefService;
+    private final SpringTemplateEngine  templateEngine;
 
-    public DishServlet(SpringTemplateEngine templateEngine, DishService dishService, ChefService chefService) {
-        this.templateEngine = templateEngine;
+
+    public DishServlet(DishService dishService, ChefService chefService, SpringTemplateEngine templateEngine) {
         this.dishService = dishService;
         this.chefService = chefService;
+        this.templateEngine = templateEngine;
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         IWebExchange webExchange = JakartaServletWebApplication
                 .buildApplication(getServletContext())
-                .buildExchange(request, response);
-
-        long chefId = -1L;
-
-        try {
-            chefId = Long.parseLong(request.getParameter("chefId"));
-        } catch(Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        Chef chef = chefService.findById(chefId);
+                .buildExchange(req, resp);
 
         WebContext context = new WebContext(webExchange);
-        context.setVariable("dishes", dishService.listDishes());
-        context.setVariable("chefId", chefId);
-        context.setVariable("chefName", chef.getFirstName() + " " + chef.getLastName());
-
-        templateEngine.process("dishesList.html", context, response.getWriter());
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String chefId = request.getParameter("chefId");
-        response.sendRedirect("/dish?chefId=" + chefId);
+        String chefId=req.getParameter("chefId");
+        Chef chef=chefService.findById(Long.valueOf(chefId));
+        context.setVariable("chef",chef);
+        context.setVariable("dishes",dishService.listDishes());
+        templateEngine.process("dishesList.html",context,resp.getWriter());
     }
 }

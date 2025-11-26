@@ -27,13 +27,17 @@
 <body>
 <!-- Dynamically display data -->
 <header>
-  <h1>Chef: <span th:text="${chefName}"></span></h1>
+  <h1>Chef: <span th:text="${chef.getFirstName()}+' '+${chef.getLastName()}"></span></h1>
 </header>
 <section>
-  <h2>Bio: <span th:text="${chefBio}"></span></h2>
+  <h2>Bio:<span th:text="${chef.getBio()}"></span></h2>
   <h2>Dishes prepared by this chef:</h2>
-  <ul th:each="dish : ${dishes}">
-    <li th:text="${dish.getName()} + '(' + ${dish.getCuisine()} + ', ' + ${dish.getPreparationTime()} + ' min)'"></li>
+  <ul>
+    <th:block th:each="dish : ${dishes}">
+      <li><span th:text="${dish.getName()}"></span>
+        <span th:text="${dish.getCuisine()}"></span>
+        <span th:text="${dish.getPreparationTime()}"></span></li>
+    </th:block>
   </ul>
 </section>
 </body>

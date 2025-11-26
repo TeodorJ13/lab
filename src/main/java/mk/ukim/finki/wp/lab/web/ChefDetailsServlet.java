@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mk.ukim.finki.wp.lab.model.Chef;
+import mk.ukim.finki.wp.lab.model.Dish;
 import mk.ukim.finki.wp.lab.service.ChefService;
 import mk.ukim.finki.wp.lab.service.DishService;
 import org.thymeleaf.context.WebContext;
@@ -14,52 +15,39 @@ import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.util.*;
 
-@WebServlet(name = "ChefDetailsServlet", urlPatterns = "/chefDetails")
+@WebServlet(name="chefdetails-servlet",urlPatterns = "/chefDetails")
 public class ChefDetailsServlet extends HttpServlet {
-    private final SpringTemplateEngine templateEngine;
+
     private final ChefService chefService;
     private final DishService dishService;
+    private final SpringTemplateEngine templateEngine;
 
-    public ChefDetailsServlet(SpringTemplateEngine templateEngine, ChefService chefService, DishService dishService) {
-        this.templateEngine = templateEngine;
+
+    public ChefDetailsServlet(ChefService chefService, DishService dishService, SpringTemplateEngine templateEngine) {
         this.chefService = chefService;
         this.dishService = dishService;
+        this.templateEngine = templateEngine;
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        IWebExchange webExchange = JakartaServletWebApplication
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        IWebExchange webExchange= JakartaServletWebApplication
                 .buildApplication(getServletContext())
-                .buildExchange(request, response);
-
-        long chefId = -1L;
-        try {
-            chefId = Long.parseLong(request.getParameter("chefId"));
-        } catch(Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        Chef chef = chefService.findById(chefId);
+                .buildExchange(req, resp);
 
         WebContext context = new WebContext(webExchange);
-        context.setVariable("chefName", chef.getFirstName() + " " + chef.getLastName());
-        context.setVariable("chefBio", chef.getBio());
-        context.setVariable("dishes", chef.getDishes());
+        String chefId=req.getParameter("chefId");
+        String dishId=req.getParameter("dishId");
+        Chef chef=chefService.findById(Long.valueOf(chefId));
+        Dish dish=dishService.findByDishId(dishId);
 
-        templateEngine.process("chefDetails.html", context, response.getWriter());
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        long chefId = -1L;
-        try {
-            chefId = Long.parseLong(request.getParameter("chefId"));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        String dishId = request.getParameter("dishId");
-        Chef chef = chefService.addDishToChef(chefId, dishId);
-        response.sendRedirect("/chefDetails?chefId=" + chef.getId());
+//        chef.getDishes().add(dish);
+//        List<Dish> dishes=chef.getDishes();
+        context.setVariable("chef",chef);
+        context.setVariable("dishes",chef.getDishes());
+        templateEngine.process("chefDetails.html",context,resp.getWriter());
     }
 }
+

@@ -13,25 +13,27 @@ import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
 
-@WebServlet(name = "ChefListServlet", urlPatterns = "/listChefs")
+@WebServlet(name="chefList-servlet",urlPatterns = {"/listChefs"})
 public class ChefListServlet extends HttpServlet {
-    private final SpringTemplateEngine templateEngine;
-    private final ChefService chefService;
 
-    public ChefListServlet(SpringTemplateEngine templateEngine, ChefService chefService) {
-        this.templateEngine = templateEngine;
+    private final ChefService chefService;
+    private final SpringTemplateEngine templateEngine;
+
+    public ChefListServlet(ChefService chefService, SpringTemplateEngine templateEngine) {
         this.chefService = chefService;
+        this.templateEngine = templateEngine;
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        IWebExchange webExchange = JakartaServletWebApplication
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        IWebExchange webExchange= JakartaServletWebApplication
                 .buildApplication(getServletContext())
-                .buildExchange(request, response);
+                .buildExchange(req, resp);
 
         WebContext context = new WebContext(webExchange);
-        context.setVariable("chefs", chefService.listChefs());
+        context.setVariable("chefs",chefService.listChefs());
 
-        templateEngine.process("listChefs.html", context, response.getWriter());
+        templateEngine.process("listChefs.html",context,resp.getWriter());
     }
+
 }

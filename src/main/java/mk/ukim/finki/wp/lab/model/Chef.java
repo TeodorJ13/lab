@@ -1,13 +1,23 @@
 package mk.ukim.finki.wp.lab.model;
 
 import lombok.Data;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class Chef {
-    private Long id;
-    private String FirstName;
-    private String LastName;
-    private String bio;
-    private List<Dish> dishes;
+    Long id;
+    String firstName;
+    String lastName;
+    String bio;
+    List<Dish> dishes;
+
+    public Chef(Long id, String firstName, String lastName, String bio, List<Dish> dishes) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.bio = bio;
+        this.dishes = dishes;
+    }
 }
