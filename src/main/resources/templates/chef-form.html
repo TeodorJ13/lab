@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Chef Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chef Form</h1>
+
+<div th:with="url=${chef.id != null} ? '/listchefs/edit/' + ${chef.id} : '/listchefs/add'">
+    <form method="post" th:action="${url}">
+        <div>
+            <label for="firstName">First Name</label>
+            <input type="text"
+                   id="firstName"
+                   name="firstName"
+                   th:value="${chef != null && chef.firstName != null ? chef.firstName : ''}"
+                   required>
+        </div>
+
+        <div>
+            <label for="lastName">Last Name</label>
+            <input type="text"
+                   id="lastName"
+                   name="lastName"
+                   th:value="${chef != null && chef.lastName != null ? chef.lastName : ''}"
+                   required>
+        </div>
+
+        <div>
+            <label for="bio">Bio</label><br/>
+            <textarea id="bio"
+                      name="bio"
+                      th:value="${chef != null && chef.bio != null ? chef.bio : ''}"
+                      rows="5" cols="50"
+                      required></textarea>
+        </div>
+
+        <div>
+            <label for="chefId">Chef ID</label><br/>
+            <input type="text"
+                   id="chefId"
+                   name="id"
+                   th:value="${chef != null && chef.id != null ? chef.id : ''}"
+                   readonly>
+        </div>
+
+        <button type="submit">Submit</button>
+        <a href="/listchefs" class="btn btn-primary">Back to Chefs</a>
+    </form>
+</div>
+
+</body>
+</html>
